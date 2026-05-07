@@ -1,18 +1,15 @@
 const User = require('../models/userModel');
 
 exports.loginOrCreateUser = async (req, res) => {
-  const { username } = req.body;
-  const user = await User.findOneAndUpdate(
-    { username },
-    { username },
-    { upsert: true, new: true }
-  );
-  res.json({
-    username: user.username,
-    equippedSkin: user.equippedSkin || 'starter',
-    ownedSkins: user.ownedSkins || ['starter'],
-    stats: user.stats || { highScore: 0 }
-  });
+  const { username, password } = req.body;
+  let user = await User.findOne({ username });
+
+  if (user) {
+    if (user.password !== password) return res.status(401).json({ error: "Wrong password" });
+  } else {
+    user = await User.create({ username, password });
+  }
+  res.json(user);
 };
 
 exports.equipSkin = async (req, res) => {
