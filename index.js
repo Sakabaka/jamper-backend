@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // 3. Mount Routes (connects user routes)
-app.use('/api', userRoutes);
+app.use(userRoutes);
 
 // 4. Simple Health Check (verify server is running on Render)
 app.get('/', (req, res) => {
