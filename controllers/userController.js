@@ -17,12 +17,11 @@ exports.loginOrCreateUser = async (req, res) => {
 
 exports.equipSkin = async (req, res) => {
   const { username, skinId } = req.body;
-  
   const user = await User.findOneAndUpdate(
     { username },
     { 
       $set: { equippedSkin: skinId },
-      $push: { "gameLogs": { event: "change_skin", value: skinId, timestamp: new Date() } }
+      $push: { gameLogs: { event: "equip_skin", value: skinId, time: new Date() } }
     },
     { new: true }
   );
