@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 
-dotenv.config({ path: "./.env" });
+dotenv.config();
 
 mongoose
   .connect(process.env.DATABASE)
@@ -24,7 +24,7 @@ app.use(express.json());
 
 app.use(userRoutes);
 
-const port = 1122;
+const port = 10000;
 
 app.listen(port, () => {
   console.log(`The server is running on Port: ${port} !!!`);
