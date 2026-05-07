@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User"); // Ensure you have a User model!
+const User = require("../models/userModel"); // Ensure you have a User model!
 
 // Update or Create a user score
 router.post("/score", async (req, res) => {
