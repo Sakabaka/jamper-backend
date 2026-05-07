@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 });
 
 // 5. Connect to MongoDB
-mongoose.connect(process.env.DATABASE_URL)
+mongoose.connect(process.env.DATABASE)
   .then(() => console.log('✅ Connection to the DB secured !!!'))
   .catch((e) => console.log('❌ DB Error:', e.message));
 
