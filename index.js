@@ -1,41 +1,34 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const userRoutes = require("./routes/userRoutes");
-const cors = require("cors");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const userRoutes = require('./routes/userRoutes');
 
-dotenv.config(); // Render will find your vars here automatically
+// Load environment variables
+dotenv.config();
 
-// 1. Database Connection
-mongoose
-  .connect(process.env.DATABASE)
-  .then(() => console.log(`✅ Connection to the DB secured !!!`))
-  .catch((e) => console.log(`❌ DB Error: ${e} !!!`));
-
+// Create Express app
 const app = express();
 
-// 2. Middleware
+// 1. CORS Middleware (so frontend can talk to backend)
 app.use(cors());
+
+// 2. JSON Body Parser (so backend can read JSON data sent from frontend)
 app.use(express.json());
 
-// 3. Routes
-// Adding a prefix like '/api' is a best practice to avoid route conflicts
-app.use("/api/users", userRoutes);
+// 3. Mount Routes (connects user routes)
+app.use('/api', userRoutes);
 
-// 4. Health Check (Missing)
-// This is helpful to check if Render is alive without calling a real API
-app.get("/", (req, res) => {
-  res.send("Jamper Backend is Running! 🚀");
+// 4. Simple Health Check (verify server is running on Render)
+app.get('/', (req, res) => {
+  res.send('Jamper Backend is Running! 🚀');
 });
 
-// 5. Global Error Handler (Missing)
-// This prevents your server from crashing if a route fails
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong on the server!" });
-});
+// 5. Connect to MongoDB
+mongoose.connect(process.env.DATABASE_URL)
+  .then(() => console.log('✅ Connection to the DB secured !!!'))
+  .catch((e) => console.log('❌ DB Error:', e.message));
 
-const port = process.env.PORT || 10000; // Use Render's port or 10000
-app.listen(port, () => {
-  console.log(`📡 Server running on Port: ${port} !!!`);
-});
+// 6. Listen on Render's Port
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`📡 Server running on Port: ${PORT} !!!`));
